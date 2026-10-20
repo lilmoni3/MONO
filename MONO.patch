@@ -1,0 +1,722 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 22e4f24..7cfb450 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -26,7 +26,7 @@ endif()
+ set(VESTA_IMGUI_DIR ${imgui_SOURCE_DIR})
+ 
+ if(NOT DEFINED VESTA_OUTPUT_NAME)
+-    set(VESTA_OUTPUT_NAME "vesta")
++    set(VESTA_OUTPUT_NAME "mono")
+ endif()
+ 
+ set(CMAKE_CXX_STANDARD 23)
+@@ -323,7 +323,7 @@ if(MSVC)
+         $<$<CONFIG:Release>:/LTCG;/OPT:REF;/OPT:ICF;/DEBUG:FULL>
+         $<$<CONFIG:Release>:/SUBSYSTEM:WINDOWS>
+         $<$<CONFIG:Release>:/ENTRY:mainCRTStartup>
+-        $<$<CONFIG:Release>:/PDBALTPATH:vesta.pdb>
++        $<$<CONFIG:Release>:/PDBALTPATH:mono.pdb>
+     )
+ else()
+     target_compile_options(${PROJECT_NAME} PRIVATE
+diff --git a/CMakePresets.json b/CMakePresets.json
+index 5c31acc..7fafed9 100644
+--- a/CMakePresets.json
++++ b/CMakePresets.json
+@@ -14,14 +14,14 @@
+     },
+     {
+       "name": "debug",
+-      "displayName": "vesta Debug (console)",
++      "displayName": "MONO Debug (console)",
+       "description": "Debug build with console and diagnostics",
+       "inherits": "msvc-base",
+       "binaryDir": "${sourceDir}/build/debug"
+     },
+     {
+       "name": "release",
+-      "displayName": "vesta Release (clean)",
++      "displayName": "MONO Release (clean)",
+       "description": "Optimized release build without the console module",
+       "inherits": "msvc-base",
+       "binaryDir": "${sourceDir}/build/release",
+@@ -29,30 +29,30 @@
+         "VESTA_PERF_LOG": "OFF",
+         "VESTA_WINDOWED_PROFILE": "OFF",
+         "VESTA_WINDOWED_SESSION": "OFF",
+-        "VESTA_OUTPUT_NAME": "vesta"
++        "VESTA_OUTPUT_NAME": "mono"
+       }
+     },
+     {
+       "name": "profile",
+-      "displayName": "vesta optimized CPU profiling",
++      "displayName": "MONO optimized CPU profiling",
+       "inherits": "release",
+       "binaryDir": "${sourceDir}/build/profile",
+       "cacheVariables": {
+         "VESTA_PERF_LOG": "ON",
+-        "VESTA_OUTPUT_NAME": "vesta-profile"
++        "VESTA_OUTPUT_NAME": "mono-profile"
+       }
+     }
+   ],
+   "buildPresets": [
+     {
+       "name": "debug",
+-      "displayName": "Build vesta Debug",
++      "displayName": "Build MONO Debug",
+       "configurePreset": "debug",
+       "configuration": "Debug"
+     },
+     {
+       "name": "release",
+-      "displayName": "Build vesta Release",
++      "displayName": "Build MONO Release",
+       "configurePreset": "release",
+       "configuration": "Release"
+     },
+diff --git a/configs/full-legit.cfg b/configs/full-legit.cfg
+index 1331b13..09cdd85 100644
+--- a/configs/full-legit.cfg
++++ b/configs/full-legit.cfg
+@@ -1515,6 +1515,17 @@
+         }
+     },
+     "misc": {
++        "palette": {
++            "background": {"r": 13, "g": 13, "b": 13, "a": 217},
++            "panel": {"r": 20, "g": 20, "b": 20, "a": 179},
++            "card": {"r": 28, "g": 28, "b": 28, "a": 153},
++            "popup": {"r": 13, "g": 13, "b": 13, "a": 199},
++            "accent": {"r": 112, "g": 112, "b": 112, "a": 255},
++            "text": {"r": 248, "g": 248, "b": 248, "a": 255},
++            "muted_text": {"r": 164, "g": 164, "b": 164, "a": 255},
++            "border": {"r": 255, "g": 255, "b": 255, "a": 15},
++            "hover": {"r": 255, "g": 255, "b": 255, "a": 20}
++        },
+         "auto_accept": true,
+         "fps_limit": 240,
+         "language": 0,
+diff --git a/configs/legit.cfg b/configs/legit.cfg
+index 5e5793d..9fd7fe2 100644
+--- a/configs/legit.cfg
++++ b/configs/legit.cfg
+@@ -1515,6 +1515,17 @@
+         }
+     },
+     "misc": {
++        "palette": {
++            "background": {"r": 13, "g": 13, "b": 13, "a": 217},
++            "panel": {"r": 20, "g": 20, "b": 20, "a": 179},
++            "card": {"r": 28, "g": 28, "b": 28, "a": 153},
++            "popup": {"r": 13, "g": 13, "b": 13, "a": 199},
++            "accent": {"r": 112, "g": 112, "b": 112, "a": 255},
++            "text": {"r": 248, "g": 248, "b": 248, "a": 255},
++            "muted_text": {"r": 164, "g": 164, "b": 164, "a": 255},
++            "border": {"r": 255, "g": 255, "b": 255, "a": 15},
++            "hover": {"r": 255, "g": 255, "b": 255, "a": 20}
++        },
+         "auto_accept": true,
+         "fps_limit": 240,
+         "language": 0,
+diff --git a/configs/semi-rage.cfg b/configs/semi-rage.cfg
+index 97f4dec..b93cec8 100644
+--- a/configs/semi-rage.cfg
++++ b/configs/semi-rage.cfg
+@@ -1515,6 +1515,17 @@
+         }
+     },
+     "misc": {
++        "palette": {
++            "background": {"r": 13, "g": 13, "b": 13, "a": 217},
++            "panel": {"r": 20, "g": 20, "b": 20, "a": 179},
++            "card": {"r": 28, "g": 28, "b": 28, "a": 153},
++            "popup": {"r": 13, "g": 13, "b": 13, "a": 199},
++            "accent": {"r": 112, "g": 112, "b": 112, "a": 255},
++            "text": {"r": 248, "g": 248, "b": 248, "a": 255},
++            "muted_text": {"r": 164, "g": 164, "b": 164, "a": 255},
++            "border": {"r": 255, "g": 255, "b": 255, "a": 15},
++            "hover": {"r": 255, "g": 255, "b": 255, "a": 20}
++        },
+         "auto_accept": true,
+         "fps_limit": 240,
+         "language": 0,
+diff --git a/src/app/main.cpp b/src/app/main.cpp
+index 7bd9cdd..e571d58 100644
+--- a/src/app/main.cpp
++++ b/src/app/main.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <diagnostics/log.hpp>
+ #include <diagnostics/performance.hpp>
+@@ -31,7 +32,7 @@ int fail_startup(app::startup_failure failure)
+     message += L"\n\n";
+     message += text.action;
+     message += L"\n\nDetails: %TEMP%\\vesta\\logs";
+-    ::MessageBoxW(nullptr, message.c_str(), L"Vesta", MB_OK | MB_ICONERROR);
++    ::MessageBoxW(nullptr, message.c_str(), L"MONO", MB_OK | MB_ICONERROR);
+     return 1;
+ }
+ 
+@@ -58,8 +59,8 @@ int run(int argc, char** argv)
+         diagnostics::emit(diagnostics::event::startup_instance_failed, diagnostics::severity::error,
+                           diagnostics::code_domain::win32, instance.error());
+         const auto message =
+-            std::format(L"Vesta could not initialize its single-instance guard (Win32 {}).", instance.error());
+-        ::MessageBoxW(nullptr, message.c_str(), L"Vesta startup", MB_OK | MB_ICONERROR);
++            std::format(L"MONO could not initialize its single-instance guard (Win32 {}).", instance.error());
++        ::MessageBoxW(nullptr, message.c_str(), L"MONO startup", MB_OK | MB_ICONERROR);
+         return 1;
+     }
+ 
+@@ -81,9 +82,9 @@ int run(int argc, char** argv)
+                           diagnostics::code_domain::mode, static_cast<std::uint32_t>(storage.stage));
+         wchar_t message[256]{};
+         std::swprintf(message, std::size(message),
+-                      L"Vesta user data initialization failed (stage %u, code %lu). Original files were preserved.",
++                      L"MONO user data initialization failed (stage %u, code %lu). Original files were preserved.",
+                       static_cast<unsigned>(storage.stage), static_cast<unsigned long>(storage.error));
+-        ::MessageBoxW(nullptr, message, L"Vesta user data", MB_OK | MB_ICONERROR);
++        ::MessageBoxW(nullptr, message, L"MONO user data", MB_OK | MB_ICONERROR);
+         return 1;
+     }
+     diagnostics::emit(diagnostics::event::startup_storage_ready);
+@@ -222,14 +223,14 @@ int main(int argc, char** argv)
+         diagnostics::emit(diagnostics::event::bootstrap_exception, diagnostics::severity::error,
+                           diagnostics::code_domain::system, static_cast<std::uint32_t>(error.code().value()));
+         wchar_t message[160]{};
+-        std::swprintf(message, std::size(message), L"Vesta initialization failed (system error %d).",
++        std::swprintf(message, std::size(message), L"MONO initialization failed (system error %d).",
+                       error.code().value());
+-        ::MessageBoxW(nullptr, message, L"Vesta startup", MB_OK | MB_ICONERROR);
++        ::MessageBoxW(nullptr, message, L"MONO startup", MB_OK | MB_ICONERROR);
+     }
+     catch (...)
+     {
+         diagnostics::emit(diagnostics::event::bootstrap_exception, diagnostics::severity::error);
+-        ::MessageBoxW(nullptr, L"Vesta initialization failed. Resources were released.", L"Vesta startup",
++        ::MessageBoxW(nullptr, L"MONO initialization failed. Resources were released.", L"MONO startup",
+                       MB_OK | MB_ICONERROR);
+     }
+     return result;
+diff --git a/src/app/startup_failure.hpp b/src/app/startup_failure.hpp
+index 5f5f987..c51ae54 100644
+--- a/src/app/startup_failure.hpp
++++ b/src/app/startup_failure.hpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #pragma once
+ 
+ #include <array>
+@@ -29,18 +30,18 @@ struct failure_text
+     switch (failure)
+     {
+         case startup_failure::game_connection:
+-            return {L"CS2 is not running.", L"Start CS2 first, then start Vesta."};
++            return {L"CS2 is not running.", L"Start CS2 first, then start MONO."};
+         case startup_failure::input_unavailable:
+             return {L"Input setup failed.",
+-                    L"Close other tools that capture the keyboard or mouse, then start Vesta again."};
++                    L"Close other tools that capture the keyboard or mouse, then start MONO again."};
+         case startup_failure::modules_not_found:
+-            return {L"CS2 is still loading.", L"Wait for the CS2 main menu, then start Vesta again."};
++            return {L"CS2 is still loading.", L"Wait for the CS2 main menu, then start MONO again."};
+         case startup_failure::addresses_failed:
+-            return {L"This Vesta version does not support the current CS2 update.",
+-                    L"Download the latest Vesta release."};
++            return {L"This MONO version does not support the current CS2 update.",
++                    L"Download the latest MONO release."};
+         case startup_failure::schema_failed:
+-            return {L"This Vesta version cannot read the game data of the current CS2 update.",
+-                    L"Download the latest Vesta release."};
++            return {L"This MONO version cannot read the game data of the current CS2 update.",
++                    L"Download the latest MONO release."};
+         case startup_failure::count:
+             break;
+     }
+diff --git a/src/config/hotkeys.cpp b/src/config/hotkeys.cpp
+index 5c7dc04..f1f59b8 100644
+--- a/src/config/hotkeys.cpp
++++ b/src/config/hotkeys.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <config/hotkeys.hpp>
+ #include <diagnostics/log.hpp>
+ #include <platform/windows/storage.hpp>
+@@ -117,7 +118,7 @@ constexpr std::array<lifecycle_key_choice, 21> choices{{
+ 
+ [[nodiscard]] std::string file_text(const lifecycle_key_bindings& keys)
+ {
+-    return std::string{"# Vesta lifecycle hotkeys / Системные клавиши Vesta\n"
++    return std::string{"# MONO lifecycle hotkeys / Системные клавиши MONO\n"
+                        "# EN: These keys can also be changed in the in-game guide (Misc > Configs). You may edit the "
+                        "value after '=' by hand.\n"
+                        "# RU: Эти клавиши можно менять и в игровом гайде (Misc > Configs). Либо измените значение "
+diff --git a/src/config/misc.hpp b/src/config/misc.hpp
+index 770e32d..b97b633 100644
+--- a/src/config/misc.hpp
++++ b/src/config/misc.hpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #pragma once
+ 
+ #include <windows.h>
+@@ -206,13 +207,13 @@ struct general_profile
+     float menu_scale{1.0f};
+     struct interface_palette
+     {
+-        foundation::rgba background{13, 13, 18, 217};
+-        foundation::rgba panel{20, 20, 26, 179};
+-        foundation::rgba card{28, 28, 36, 153};
+-        foundation::rgba popup{13, 13, 18, 199};
+-        foundation::rgba accent{124, 58, 237, 255};
+-        foundation::rgba text{248, 248, 242, 255};
+-        foundation::rgba muted_text{161, 161, 170, 255};
++        foundation::rgba background{13, 13, 13, 217};
++        foundation::rgba panel{20, 20, 20, 179};
++        foundation::rgba card{28, 28, 28, 153};
++        foundation::rgba popup{13, 13, 13, 199};
++        foundation::rgba accent{112, 112, 112, 255};
++        foundation::rgba text{248, 248, 248, 255};
++        foundation::rgba muted_text{164, 164, 164, 255};
+         foundation::rgba border{255, 255, 255, 15};
+         foundation::rgba hover{255, 255, 255, 20};
+     } palette{};
+diff --git a/src/config/settings.cpp b/src/config/settings.cpp
+index 3732153..fa6c016 100644
+--- a/src/config/settings.cpp
++++ b/src/config/settings.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <game/state/constants.hpp>
+ #include <diagnostics/log.hpp>
+@@ -1953,6 +1954,19 @@ static void from_json(const json& j, general_profile& m)
+         read_field(p, "muted_text", m.palette.muted_text);
+         read_field(p, "border", m.palette.border);
+         read_field(p, "hover", m.palette.hover);
++        // MONO: migrate only the complete original palette; preserve custom themes.
++        const bool original_palette =
++            m.palette.background == foundation::rgba{13, 13, 18, 217} &&
++            m.palette.panel == foundation::rgba{20, 20, 26, 179} &&
++            m.palette.card == foundation::rgba{28, 28, 36, 153} &&
++            m.palette.popup == foundation::rgba{13, 13, 18, 199} &&
++            m.palette.accent == foundation::rgba{124, 58, 237, 255} &&
++            m.palette.text == foundation::rgba{248, 248, 242, 255} &&
++            m.palette.muted_text == foundation::rgba{161, 161, 170, 255} &&
++            m.palette.border == foundation::rgba{255, 255, 255, 15} &&
++            m.palette.hover == foundation::rgba{255, 255, 255, 20};
++        if (original_palette)
++            m.palette = general_profile::interface_palette{};
+     }
+     read_field(j, "auto_accept", m.auto_accept);
+     read_field(j, "obs_bypass", m.obs_bypass);
+diff --git a/src/render/text/localization.cpp b/src/render/text/localization.cpp
+index 27d2aa5..b8fd912 100644
+--- a/src/render/text/localization.cpp
++++ b/src/render/text/localization.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <render/text/localization.hpp>
+ #include <config/settings.hpp>
+@@ -95,8 +96,8 @@ const std::unordered_map<std::string_view, const char*>& russian()
+         {"Overlay is in compatibility mode and may be hidden in true fullscreen. Set CS2 to Fullscreen Windowed.",
+          "Оверлей в режиме совместимости и может быть скрыт в настоящем полноэкранном режиме. Включите в CS2 "
+          "«Полноэкранный в окне»."},
+-        {"Lua is unavailable: its data folder could not be prepared. Check free disk space, then restart Vesta.",
+-         "Lua недоступен: не удалось подготовить его папку данных. Проверьте свободное место и перезапустите Vesta."},
++        {"Lua is unavailable: its data folder could not be prepared. Check free disk space, then restart MONO.",
++         "Lua недоступен: не удалось подготовить его папку данных. Проверьте свободное место и перезапустите MONO."},
+         {"The previous session ended unexpectedly. Save a report in Misc > Configs > Diagnostics.",
+          "Прошлый сеанс завершился неожиданно. Сохраните отчёт: Разное > Конфиги > Диагностика."},
+         {"Keyboard blocking could not start. Auto Stop and the grenade helper may not hold movement keys.",
+@@ -105,7 +106,7 @@ const std::unordered_map<std::string_view, const char*>& russian()
+         {"Warning", "Предупреждение"},
+         {"Notice", "Сообщение"},
+         {"Open the menu to close this message.", "Откройте меню, чтобы закрыть это сообщение."},
+-        {"Welcome to Vesta", "Добро пожаловать в Vesta"},
++        {"Welcome to MONO", "Добро пожаловать в MONO"},
+         {"Step %d of %d", "Шаг %d из %d"},
+         {"Choose your language. It applies at once and is saved with your settings.",
+          "Выберите язык. Он применяется сразу и сохраняется вместе с настройками."},
+@@ -114,16 +115,16 @@ const std::unordered_map<std::string_view, const char*>& russian()
+          "Эти клавиши работают в игре. Измените их, если они мешают. Изменения применяются сразу и сохраняются в "
+          "hotkeys.cfg."},
+         {"Open / close the menu", "Открыть / закрыть меню"},
+-        {"Exit Vesta", "Выйти из Vesta"},
++        {"Exit MONO", "Выйти из MONO"},
+         {"The two actions need different keys.", "Для двух действий нужны разные клавиши."},
+         {"This key cannot be used.", "Эту клавишу нельзя использовать."},
+         {"The new keys work now, but hotkeys.cfg could not be saved.",
+          "Новые клавиши уже работают, но сохранить hotkeys.cfg не удалось."},
+         {"Movement keys are released while the menu is open, so your character does not keep running.",
+          "Клавиши движения отпускаются, пока меню открыто, поэтому персонаж не продолжает бежать."},
+-        {"Settings, cache and logs live in %TEMP%\\vesta. Cleaning tools may remove it; Vesta then starts with default "
++        {"Settings, cache and logs live in %TEMP%\\vesta. Cleaning tools may remove it; MONO then starts with default "
+          "settings.",
+-         "Настройки, кэш и журналы лежат в %TEMP%\\vesta. Программы очистки могут её удалить, тогда Vesta запустится с "
++         "Настройки, кэш и журналы лежат в %TEMP%\\vesta. Программы очистки могут её удалить, тогда MONO запустится с "
+          "настройками по умолчанию."},
+         {"Hotkeys", "Горячие клавиши"},
+         {"Good to know", "Полезно знать"},
+@@ -133,9 +134,9 @@ const std::unordered_map<std::string_view, const char*>& russian()
+          "Что-то не так? Разное > Конфиги > Диагностика сохраняет отчёт, который можно приложить к сообщению об "
+          "ошибке. Там же можно повторить этот гайд."},
+         {"Performance", "Производительность"},
+-        {"Vesta is external: it runs next to the game as its own program and uses your computer's resources, mostly "
++        {"MONO is external: it runs next to the game as its own program and uses your computer's resources, mostly "
+          "the CPU, and the GPU for some features.",
+-         "Vesta — внешняя (external) программа: она работает рядом с игрой и использует ресурсы компьютера, в первую "
++         "MONO — внешняя (external) программа: она работает рядом с игрой и использует ресурсы компьютера, в первую "
+          "очередь процессор, а для некоторых функций и видеокарту."},
+         {"If the game uses all or almost all of your hardware:",
+          "Если игра занимает все или почти все ресурсы железа:"},
+@@ -600,7 +601,7 @@ const std::unordered_map<std::string_view, const char*>& russian()
+         {"GPU Effects", "GPU-эффекты"},
+         {"Restart to change GPU effects. The base overlay uses the display adapter; off keeps 2D ESP and the menu, "
+          "while chams, no flash, no smoke and bloom are disabled.",
+-         "После изменения перезапустите Vesta. Базовый оверлей использует видеокарту; выключение сохраняет 2D ESP и "
++         "После изменения перезапустите MONO. Базовый оверлей использует видеокарту; выключение сохраняет 2D ESP и "
+          "меню, но отключает chams, no flash, no smoke и bloom."},
+         {"Maximum FPS", "Максимум FPS"},
+         {"INTERFACE", "ИНТЕРФЕЙС"},
+@@ -688,9 +689,9 @@ const std::unordered_map<std::string_view, const char*>& russian()
+          "Отчёт сохранён на рабочем столе. Приложите его к issue на GitHub."},
+         {"Could not save the report.", "Не удалось сохранить отчёт."},
+         {"Lua is unavailable: its data folder could not be prepared. Check free disk space and folder permissions, "
+-         "then restart Vesta.",
++         "then restart MONO.",
+          "Lua недоступен: не удалось подготовить его папку данных. Проверьте свободное место и права на папку, затем "
+-         "перезапустите Vesta."},
++         "перезапустите MONO."},
+         {"The previous session ended unexpectedly. Save a report and attach it to your GitHub issue.",
+          "Прошлый сеанс завершился неожиданно. Сохраните отчёт и приложите его к issue на GitHub."},
+         {"File Name", "Имя файла"},
+diff --git a/src/scripting/runtime.cpp b/src/scripting/runtime.cpp
+index 937480a..1a2c06a 100644
+--- a/src/scripting/runtime.cpp
++++ b/src/scripting/runtime.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <foundation/identity.hpp>
+ #include <render/presentation.hpp>
+@@ -126,7 +127,7 @@ std::string sanitize_id(std::string value)
+ 
+ // Keys a script may press: the ones a game is played with. Refused: Windows, Alt and Escape (they reach the shell and
+ // other programs), Enter (it sends chat and console lines), the console key, application, browser and media keys,
+-// and Vesta's own menu and exit keys.
++// and MONO's own menu and exit keys.
+ [[nodiscard]] bool script_key_allowed(const std::uint16_t key) noexcept
+ {
+     if (config::is_lifecycle_key(key))
+@@ -800,7 +801,7 @@ void runtime_t::implementation::script_instance::hook(lua_State* state, lua_Debu
+ {
+     auto* script = self(state);
+     if (script && clock::now() > script->callback_deadline)
+-        luaL_error(state, "Vesta Lua callback exceeded its execution budget");
++        luaL_error(state, "MONO Lua callback exceeded its execution budget");
+ }
+ 
+ void runtime_t::implementation::script_instance::set_error(std::string value, const script_state next)
+diff --git a/src/ui/menu/guide_page.cpp b/src/ui/menu/guide_page.cpp
+index ebe768e..6cbbf46 100644
+--- a/src/ui/menu/guide_page.cpp
++++ b/src/ui/menu/guide_page.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <config/settings.hpp>
+ #include <config/first_run.hpp>
+@@ -259,7 +260,7 @@ void draw_panel(ImDrawList* draw, const ImVec2 origin, const float appear)
+ void draw_title(const guide_content& content, const int step)
+ {
+     namespace loc = render::localization;
+-    constexpr const char* titles[guide_steps]{"Welcome to Vesta", "Hotkeys", "Good to know", "Performance"};
++    constexpr const char* titles[guide_steps]{"Welcome to MONO", "Hotkeys", "Good to know", "Performance"};
+     const auto size = ImGui::GetFontSize() * 1.6f;
+     const auto position = content.screen(40.0f);
+     content.draw->AddText(ImGui::GetFont(), size, position, faded(k_text_main, content.alpha), loc::tr(titles[step]));
+@@ -349,7 +350,7 @@ void draw_hotkeys_step(const guide_content& content, const char*& message)
+         const char* label;
+         std::uint16_t current;
+         std::uint16_t* chosen;
+-    } rows[]{{"Open / close the menu", keys.menu, &menu_choice}, {"Exit Vesta", keys.exit, &exit_choice}};
++    } rows[]{{"Open / close the menu", keys.menu, &menu_choice}, {"Exit MONO", keys.exit, &exit_choice}};
+     float y = k_content_top + 62.0f;
+     for (const auto& row : rows)
+     {
+@@ -391,7 +392,7 @@ void draw_notes_step(const guide_content& content)
+     ImGui::SetCursorPos({k_margin + content.slide + 18.0f, k_content_top + 10.0f});
+     ImGui::PushTextWrapPos(k_margin + content.slide + k_content_width - 18.0f);
+     ImGui::TextUnformatted(loc::tr("Settings, cache and logs live in %TEMP%\\vesta. Cleaning tools may remove it; "
+-                                   "Vesta then starts with default settings."));
++                                   "MONO then starts with default settings."));
+     ImGui::PopTextWrapPos();
+     ImGui::SetCursorPos({k_margin + content.slide + 18.0f, k_content_top + data_height - 44.0f});
+     if (guide_button(loc::tr("Open data folder"), 190.0f, false))
+@@ -406,7 +407,7 @@ void draw_notes_step(const guide_content& content)
+         const char* name;
+         const char* label;
+     } hints[]{{config::lifecycle_key_name(keys.menu), "Open / close the menu"},
+-              {config::lifecycle_key_name(keys.exit), "Exit Vesta"}};
++              {config::lifecycle_key_name(keys.exit), "Exit MONO"}};
+     float line = min.y + 14.0f;
+     for (const auto& hint : hints)
+     {
+@@ -421,12 +422,12 @@ void draw_notes_step(const guide_content& content)
+                       true);
+ }
+ 
+-// Step 4: Vesta runs beside the game and shares its hardware; what to do when the game leaves nothing spare.
++// Step 4: MONO runs beside the game and shares its hardware; what to do when the game leaves nothing spare.
+ void draw_performance_step(const guide_content& content)
+ {
+     namespace loc = render::localization;
+     content.paragraph(k_content_top,
+-                      "Vesta is external: it runs next to the game as its own program and uses your computer's "
++                      "MONO is external: it runs next to the game as its own program and uses your computer's "
+                       "resources, mostly the CPU, and the GPU for some features.",
+                       false);
+ 
+diff --git a/src/ui/menu/internal.hpp b/src/ui/menu/internal.hpp
+index fe9ef74..c1a87b8 100644
+--- a/src/ui/menu/internal.hpp
++++ b/src/ui/menu/internal.hpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #pragma once
+ #include <ui/menu/menu.hpp>
+ #include <ui/menu/geometry.hpp>
+@@ -41,21 +42,21 @@ private:
+     const void* m_object;
+     void (*m_call)(const void*);
+ };
+-inline ImVec4 k_bg_base{13.0f / 255.0f, 13.0f / 255.0f, 18.0f / 255.0f, 0.85f};
++inline ImVec4 k_bg_base{13.0f / 255.0f, 13.0f / 255.0f, 13.0f / 255.0f, 0.85f};
+ 
+-inline ImVec4 k_bg_panel{20.0f / 255.0f, 20.0f / 255.0f, 26.0f / 255.0f, 0.70f};
++inline ImVec4 k_bg_panel{20.0f / 255.0f, 20.0f / 255.0f, 20.0f / 255.0f, 0.70f};
+ 
+-inline ImVec4 k_bg_card{28.0f / 255.0f, 28.0f / 255.0f, 36.0f / 255.0f, 0.60f};
++inline ImVec4 k_bg_card{28.0f / 255.0f, 28.0f / 255.0f, 28.0f / 255.0f, 0.60f};
+ 
+-inline ImVec4 k_bg_popup{13.0f / 255.0f, 13.0f / 255.0f, 18.0f / 255.0f, 0.78f};
++inline ImVec4 k_bg_popup{13.0f / 255.0f, 13.0f / 255.0f, 13.0f / 255.0f, 0.78f};
+ 
+ inline ImVec4 k_bg_hover{1.0f, 1.0f, 1.0f, 0.08f};
+ 
+-inline ImVec4 k_accent{124.0f / 255.0f, 58.0f / 255.0f, 237.0f / 255.0f, 1.0f};
++inline ImVec4 k_accent{112.0f / 255.0f, 112.0f / 255.0f, 112.0f / 255.0f, 1.0f};
+ 
+-inline ImVec4 k_text_main{248.0f / 255.0f, 248.0f / 255.0f, 242.0f / 255.0f, 1.0f};
++inline ImVec4 k_text_main{248.0f / 255.0f, 248.0f / 255.0f, 248.0f / 255.0f, 1.0f};
+ 
+-inline ImVec4 k_text_muted{161.0f / 255.0f, 161.0f / 255.0f, 170.0f / 255.0f, 1.0f};
++inline ImVec4 k_text_muted{164.0f / 255.0f, 164.0f / 255.0f, 164.0f / 255.0f, 1.0f};
+ 
+ inline ImVec4 k_border{1.0f, 1.0f, 1.0f, 0.06f};
+ 
+@@ -428,6 +429,10 @@ void draw_popup_surface(ImDrawList* draw, ImVec2 min, ImVec2 max, float rounding
+ void add_linear_gradient_rounded(ImDrawList* draw, ImVec2 min, ImVec2 max, ImU32 from, ImU32 to, float rounding,
+                                  ImDrawFlags corners, bool horizontal);
+ 
++// MONO: a dark-to-light accent gradient, retaining the caller's alpha and animation.
++void draw_accent_gradient(ImDrawList* draw, ImVec2 min, ImVec2 max, ImVec4 idle, float amount, float rounding,
++                          float opacity = 1.0f);
++
+ void push_menu_font(render::draw::font* font);
+ 
+ std::size_t utf8_decode(const char* begin, const char* end, unsigned int& out);
+diff --git a/src/ui/menu/layout.cpp b/src/ui/menu/layout.cpp
+index a40a203..171e50e 100644
+--- a/src/ui/menu/layout.cpp
++++ b/src/ui/menu/layout.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <render/presentation.hpp>
+ #include <scripting/runtime.hpp>
+@@ -248,6 +249,19 @@ void add_linear_gradient_rounded(ImDrawList* draw, ImVec2 min, ImVec2 max, ImU32
+     }
+ }
+ 
++void draw_accent_gradient(ImDrawList* draw, ImVec2 min, ImVec2 max, ImVec4 idle, float amount, float rounding,
++                          float opacity)
++{
++    amount = std::clamp(amount, 0.0f, 1.0f);
++    const auto dark_accent = ImVec4{k_accent.x * 0.66f, k_accent.y * 0.66f, k_accent.z * 0.66f, k_accent.w};
++    auto from = mix(idle, dark_accent, amount);
++    auto to = mix(idle, k_accent, amount);
++    from.w *= opacity;
++    to.w *= opacity;
++    add_linear_gradient_rounded(draw, min, max, packed(from), packed(to), rounding, ImDrawFlags_RoundCornersAll,
++                                true);
++}
++
+ void push_menu_font(render::draw::font* font)
+ {
+     if (font && font->im_font)
+@@ -620,7 +634,7 @@ bool tab_button(const char* label, bool active)
+                     active_t * 0.55f);
+     }
+     const auto idle = mix(k_bg_card, k_bg_hover, hover_t);
+-    draw->AddRectFilled(min, max, packed(mix(idle, k_accent, active_t)), 20.0f);
++    draw_accent_gradient(draw, min, max, idle, active_t, 20.0f);
+     if (active_t < 0.99f && hover_t > 0.01f)
+         draw->AddRect(min, max, packed(mix(k_border, k_border_light, hover_t)), 20.0f);
+     draw->AddText({min.x + 16.0f, min.y + (size.y - text_size.y) * 0.5f},
+@@ -712,8 +726,7 @@ bool nav_button(const char* label, bool active, int icon)
+         soft_shadow(draw, min, max, 14.0f, {0.0f, 5.0f}, 10.0f, {k_accent.x, k_accent.y, k_accent.z, 1.0f},
+                     active_t * 0.70f);
+     const auto idle = ImVec4{k_bg_hover.x, k_bg_hover.y, k_bg_hover.z, k_bg_hover.w * hover_t};
+-    const auto background = mix(idle, k_accent, active_t);
+-    draw->AddRectFilled(min, max, packed(background), 14.0f);
++    draw_accent_gradient(draw, min, max, idle, active_t, 14.0f);
+     const auto color = packed(mix(k_text_muted, ImVec4{1, 1, 1, 1}, std::max(hover_t, active_t)));
+     draw_nav_icon(draw, icon, {min.x + 27.0f, min.y + 24.0f}, color);
+     draw->AddText({min.x + 50.0f, min.y + (48.0f - ImGui::GetTextLineHeight()) * 0.5f}, color,
+diff --git a/src/ui/menu/menu.cpp b/src/ui/menu/menu.cpp
+index 26eb3c7..6371686 100644
+--- a/src/ui/menu/menu.cpp
++++ b/src/ui/menu/menu.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <render/presentation.hpp>
+ #include <platform/windows/input.hpp>
+@@ -224,7 +225,7 @@ void menu_t::draw_sidebar()
+     const auto* brand = render::fonts().menu_brand_30;
+     if (brand && brand->im_font)
+     {
+-        constexpr auto text = std::string_view{"VESTA"};
++        constexpr auto text = std::string_view{"MONO"};
+         const auto brand_size = brand->font_size * 1.25f;
+         float width{};
+         for (const auto c : text)
+diff --git a/src/ui/menu/widgets.cpp b/src/ui/menu/widgets.cpp
+index 6fe2ce1..69ce121 100644
+--- a/src/ui/menu/widgets.cpp
++++ b/src/ui/menu/widgets.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <scripting/runtime.hpp>
+ #include <game/input/bindings.hpp>
+@@ -51,12 +52,9 @@ void toggle_control(bool& value)
+     const auto hover = animate_state(g_hover_animations, id, hovered, 0.16f);
+     const auto position = std::clamp(animation.position, 0.0f, 1.0f);
+     auto* draw = ImGui::GetWindowDrawList();
+-    const auto off_track = mix(ImVec4{38.0f / 255.0f, 38.0f / 255.0f, 48.0f / 255.0f, 0.88f},
+-                               ImVec4{50.0f / 255.0f, 50.0f / 255.0f, 62.0f / 255.0f, 0.96f}, hover);
+-    auto track = mix(off_track, k_accent, position);
+-    track.w *= reveal;
+-
+-    draw->AddRectFilled(min, max, packed(track), 12.0f);
++    const auto off_track = mix(ImVec4{38.0f / 255.0f, 38.0f / 255.0f, 38.0f / 255.0f, 0.88f},
++                               ImVec4{50.0f / 255.0f, 50.0f / 255.0f, 50.0f / 255.0f, 0.96f}, hover);
++    draw_accent_gradient(draw, min, max, off_track, position, 12.0f, reveal);
+ 
+     const auto knob_target_x = raw_min.x + 12.0f + 22.0f * position;
+     const auto knob_center = ImVec2{center.x + (knob_target_x - center.x) * reveal, center.y};
+@@ -65,7 +63,7 @@ void toggle_control(bool& value)
+     draw->AddCircleFilled(knob_center + ImVec2{0.0f, 1.5f}, knob_radius + 1.0f,
+                           IM_COL32(0, 0, 0, static_cast<int>(55.0f * reveal)), 28);
+     draw->AddEllipseFilled(knob_center, {knob_radius * (1.0f + motion), knob_radius * (1.0f - motion * 0.45f)},
+-                           IM_COL32(250, 250, 252, static_cast<int>(255.0f * reveal)), 0.0f, 28);
++                           IM_COL32(250, 250, 250, static_cast<int>(255.0f * reveal)), 0.0f, 28);
+     draw->AddCircle(knob_center, knob_radius, IM_COL32(255, 255, 255, static_cast<int>(110.0f * reveal)), 28, 1.0f);
+ }
+ 
+diff --git a/src/ui/overlay/hud.cpp b/src/ui/overlay/hud.cpp
+index 5a8881a..4e2c549 100644
+--- a/src/ui/overlay/hud.cpp
++++ b/src/ui/overlay/hud.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <foundation/identity.hpp>
+ #include <platform/windows/input.hpp>
+@@ -29,7 +30,7 @@ constexpr ImU32 k_wm_text = IM_COL32(248, 248, 242, 255);
+ constexpr ImU32 k_wm_muted = IM_COL32(150, 150, 160, 255);
+ 
+ // Uppercase, matching the sidebar wordmark.
+-constexpr const char* k_wm_brand = "VESTA";
++constexpr const char* k_wm_brand = "MONO";
+ 
+ enum class stat_icon
+ {
+@@ -593,7 +594,7 @@ struct watermark_metrics
+     }
+ };
+ 
+-// "VESTA" uses the menu's brand font (as the sidebar logo) at a much smaller size; the stats use its regular font.
++// "MONO" uses the menu's brand font (as the sidebar logo) at a much smaller size; the stats use its regular font.
+ [[nodiscard]] watermark_metrics measure_watermark(const float dpi_scale, const float user_scale,
+                                                   const watermark_chips& chips)
+ {
+diff --git a/src/ui/overlay/overlay.cpp b/src/ui/overlay/overlay.cpp
+index 4466bf5..77d7b60 100644
+--- a/src/ui/overlay/overlay.cpp
++++ b/src/ui/overlay/overlay.cpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #include <stdafx.hpp>
+ #include <diagnostics/performance.hpp>
+ #include <render/presentation.hpp>
+@@ -405,7 +406,7 @@ bool overlay_t::wait_for_signal(HANDLE signal, std::uint64_t observed_transition
+     }
+ }
+ 
+-// The exit key: releases everything Vesta may be holding in the game and asks the overlay to stop.
++// The exit key: releases everything MONO may be holding in the game and asks the overlay to stop.
+ void overlay_t::release_input_for_exit()
+ {
+     ::ClipCursor(nullptr);
+@@ -1335,7 +1336,7 @@ void overlay_t::request_file(const file_request kind)
+             std::optional<std::wstring> chosen{};
+             if (kind == file_request::choose_config_folder)
+             {
+-                chosen = pick_folder(m_hwnd, L"Choose a folder for Vesta configs");
++                chosen = pick_folder(m_hwnd, L"Choose a folder for MONO configs");
+             }
+             else
+             {
+@@ -1352,12 +1353,12 @@ void overlay_t::request_file(const file_request kind)
+                 if (kind == file_request::import_lua)
+                 {
+                     ofn.lpstrFilter = L"Lua scripts (*.lua)\0*.lua\0";
+-                    ofn.lpstrTitle = L"Import Lua script into Vesta";
++                    ofn.lpstrTitle = L"Import Lua script into MONO";
+                 }
+                 else
+                 {
+-                    ofn.lpstrFilter = L"Vesta config (*.cfg)\0*.cfg\0";
+-                    ofn.lpstrTitle = L"Import a Vesta config";
++                    ofn.lpstrFilter = L"MONO config (*.cfg)\0*.cfg\0";
++                    ofn.lpstrTitle = L"Import a MONO config";
+                 }
+                 if (::GetOpenFileNameW(&ofn))
+                     chosen = std::wstring{path.c_str()};
+diff --git a/src/ui/overlay/system_notices.hpp b/src/ui/overlay/system_notices.hpp
+index 4171867..77d5472 100644
+--- a/src/ui/overlay/system_notices.hpp
++++ b/src/ui/overlay/system_notices.hpp
+@@ -1,3 +1,4 @@
++// Modified for MONO: application branding and monochrome interface.
+ #pragma once
+ 
+ #include <diagnostics/readiness.hpp>
+@@ -81,7 +82,7 @@ inline constexpr double loading_notice_delay_seconds = 3.0;
+     if (current.scripting.value == state::error)
+         result.push_back(
+             {"scripting", level::warning,
+-             "Lua is unavailable: its data folder could not be prepared. Check free disk space, then restart Vesta.",
++             "Lua is unavailable: its data folder could not be prepared. Check free disk space, then restart MONO.",
+              1});
+     if (current.input_hook_failed)
+         result.push_back(
